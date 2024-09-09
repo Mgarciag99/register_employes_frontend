@@ -1,5 +1,9 @@
 :root {
-    --primary-color: #3498db;
-    --secondary-color: #2ecc71;
+    --primary-color: rgb(82, 78, 183);
+    --secondary-color: rgb(50, 50, 120);
+    --gray-light: rgb(205, 209, 228, 0.5);
+    --gray-semi-ligth: rgb(205, 209, 228, 0.2);
+    --gray-ultra-light: rgb(205, 209, 228, 0.1);
+    --purple: rgb(52, 45, 113);
     --font-size: 16px;
 }

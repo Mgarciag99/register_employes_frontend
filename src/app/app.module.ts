@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidenavComponent } from './RRHH.CORE/components/sidenav/sidenav.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { SidenavComponent } from './RRHH.CORE/components/sidenav/sidenav.compone
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SidenavComponent
+    SidenavComponent,
+    HttpClientModule
   ],
   providers: [
     provideAnimationsAsync()

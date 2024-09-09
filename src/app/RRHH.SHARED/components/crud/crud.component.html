@@ -1,0 +1,19 @@
+<mat-card class="h-100 p-3">
+  <h4 class="poppins-extrabold mb-3">{{ (!isEdit) ? 'Agregar' : 'Editar' }}</h4>
+  <ng-container *ngTemplateOutlet="templateOutlet"></ng-container>
+  <mat-card-actions align="end" class="gap-2">
+    @if(isEdit){
+      <button 
+      mat-flat-button 
+      class="btn btn-light rounded-5"
+      (click)="cancel()"
+      >Cancelar</button>
+    }
+    <button 
+    mat-flat-button 
+    class="btn btn-primary rounded-5"
+    [disabled]="validateForm()"
+    (click)="save()"
+    >{{ (!isEdit) ? 'Agregar' : 'Editar' }}</button>
+  </mat-card-actions>
+</mat-card>

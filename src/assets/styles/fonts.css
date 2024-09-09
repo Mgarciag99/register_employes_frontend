@@ -36,7 +36,7 @@
   
   .poppins-bold {
     font-family: "Poppins", sans-serif;
-    font-weight: 700;
+    font-weight: 700 !important;
     font-style: normal;
   }
   

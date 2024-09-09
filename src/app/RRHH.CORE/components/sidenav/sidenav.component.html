@@ -1,16 +1,33 @@
 <div class="example-container h-100" [class.example-is-mobile]="mobileQuery.matches">
   <mat-toolbar class="example-toolbar bg-white">
     <button class="" mat-icon-button (click)="snav.toggle()"><mat-icon class="text-dark">menu</mat-icon></button>
-    <h1 class="poppins-bold">RRHH - Management </h1>
+    <h1 class="poppins-extrabold">RRHH - Management </h1>
   </mat-toolbar>
 
-  <mat-sidenav-container class="example-sidenav-container"
-                        [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-      <mat-nav-list>
-        @for (nav of fillerNav; track nav) {
-          <a mat-list-item routerLink=".">{{nav}}</a>
+  <mat-sidenav-container 
+  class="example-sidenav-container"
+  [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav 
+    [opened]="true"
+    #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+    [fixedInViewport]="mobileQuery.matches" 
+    fixedTopGap="56">
+      <mat-nav-list 
+      class="d-flex flex-column gap-2 p-2">
+        @for (nav of navOptions; track nav) {
+          <h6 class="text-light px-3 pt-3 menu-title">{{nav.name | uppercase}} </h6>
+          @for(submenu of nav.submenus; track submenu){
+            <a 
+            
+            [routerLink]="[submenu.route]"
+            class="item-sidenav p-3 d-flex align-items-center gap-3 rounded-3 text-decoration-none">
+              <mat-icon 
+              class="text-light">{{submenu.icon}}</mat-icon>
+              <p 
+              class="text-light m-0" 
+              >{{submenu.name}}</p>
+            </a>
+          }
         }
       </mat-nav-list>
     </mat-sidenav>
