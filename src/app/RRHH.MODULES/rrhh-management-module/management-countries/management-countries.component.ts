@@ -28,7 +28,8 @@ export class ManagementCountriesComponent implements OnInit {
     }
   ]
 
-  paramsPagination: Pagination  = {
+  paramsPagination: Pagination = {
+    search: '',
     limit: 10,
     page: 1,
   }
@@ -44,9 +45,15 @@ export class ManagementCountriesComponent implements OnInit {
     this.get();
   }
 
-  updateParams(pagination: PageEvent){
+  updateParams(pagination: PageEvent) {
     this.paramsPagination.page = pagination?.pageIndex + 1;
     this.paramsPagination.limit = pagination?.pageSize;
+    this.get();
+  }
+
+  search(text: string){
+    this.paramsPagination.page = 1;
+    this.paramsPagination.search = text;
     this.get();
   }
 
@@ -61,30 +68,43 @@ export class ManagementCountriesComponent implements OnInit {
       })
   }
 
-  handleOptionSelected(event: Country){
+  handleOptionSelected(event: Country) {
     this.optionSelected = event;
   }
 
-  observableToExecute(formData: Country){
-    if(Object.keys(formData).length){
+  observableToExecute(formData: Country) {
+    if (Object.keys(formData).length) {
       return this.countriesService.update(this.form.value as payloadCreateCountry, formData.idCountry)
     }
     return this.countriesService.save(this.form.value as payloadCreateCountry)
   }
 
-
-  saveData(formData: Country){
+  executeService(formData: Country) {
     this.observableToExecute(formData)
-    .subscribe({
-      next: (data) => {
-        if(data){
-          this.optionSelected = {};
-          this.get();
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.optionSelected = {};
+            this.get();
+          }
         }
-      }
-    })
-    
+      })
   }
+
+  updateStatus(formData: Country) {
+    const { status, idCountry } = formData
+    this.countriesService.delete({ status: !status }, idCountry)
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.optionSelected = {};
+            this.get();
+          }
+        }
+      })
+
+  }
+
 
   ngOnDestroy(): void {
     this.destroSubject.next(null);

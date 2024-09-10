@@ -12,6 +12,7 @@ export interface Columns{
 }
 
 export interface Pagination{
+    search: string,
     limit: number;
     page: number;
 }

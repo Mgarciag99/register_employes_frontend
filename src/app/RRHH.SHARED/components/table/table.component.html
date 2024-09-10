@@ -1,23 +1,37 @@
 <mat-card class="h-100 p-3 overflow-auto">
-  <h4 class="poppins-extrabold mb-3">Paises</h4>
-  <mat-form-field appearance="outline">
+  <h4 class="poppins-extrabold mb-3">{{title}}</h4>
+  <mat-form-field appearance="outline" >
     <mat-label>Buscar</mat-label>
     <input 
     type="text" 
     matInput 
     [(ngModel)]="search"
-    placeholder="Buscar">
+    (keyup.enter)="onSearch()" 
+    placeholder="Buscar"
+    [disabled]="isloading"
+    >
+    @if(search){
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
   </mat-form-field>
   <div class="selection-list-container">
-    <mat-selection-list class="h-100 overflow-auto" [multiple]="false" (selectionChange)="selectedOption($event)"  color="primary">
-      @for (item of data; track item) {
-        @for(column of columns; track column){
-          @if(column.field && item[column.field]){
-            <mat-list-option [value]="item" class="rounded-5">{{item[column.field]}}</mat-list-option>
+    @if(loaderType === 'skeleton'){
+      <app-skeleton-table/>
+    }@else if(!loaderType){
+      <mat-selection-list class="h-100 overflow-auto pe-1" [multiple]="false" (selectionChange)="selectedOption($event)"  color="primary">
+        <div class="h-100">
+          @for (item of data; track item) {
+            @for(column of columns; track column){
+              @if(column.field && item[column.field]){
+                <mat-list-option [value]="item" class="rounded-5">{{item[column.field]}}</mat-list-option>
+              }
+            }
           }
-        }
-      }
-    </mat-selection-list>
+        </div>
+      </mat-selection-list>
+    }
   </div>
   <mat-paginator 
   [hidePageSize]="true"
@@ -25,7 +39,8 @@
   [pageSize]="10"
   [pageSizeOptions]="[5, 10, 25, 100]"
   aria-label="Select page"
+  [disabled]="isloading"
   (page)="pageChange($event)"
   >
-</mat-paginator>
+  </mat-paginator>
 </mat-card>
