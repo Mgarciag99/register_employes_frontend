@@ -13,41 +13,43 @@
           ></app-table>
       </div>
       <div class="col-8 h-100 col-xs-12">
-        <mat-card class="h-100 px-3 pb-3">
-          <div class="d-flex justify-content-end gap-2">
-              <button mat-icon-button (click)="accordion().openAll()"><mat-icon>unfold_more</mat-icon></button>
-              <button mat-icon-button (click)="accordion().closeAll()"><mat-icon>unfold_less</mat-icon></button>
+        <mat-card class="h-100 p-3">
+          <div class="h-100 overflow-auto pe-1">
+            <div class="d-flex justify-content-end gap-2">
+                <button mat-icon-button (click)="accordion().openAll()"><mat-icon>unfold_more</mat-icon></button>
+                <button mat-icon-button (click)="accordion().closeAll()"><mat-icon>unfold_less</mat-icon></button>
+            </div>
+            <mat-accordion multi>
+                <mat-expansion-panel [hideToggle]="false" expanded="true" class="mb-1 border">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title><h6 class="text-muted poppins-regular">EMPLEADO</h6></mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-crud
+                    [templateOutlet]="customTemplate"
+                    [optionSelected]="optionSelected"
+                    [form]="form"
+                    (submitForm)="executeService($event)"
+                    (updateStatus)="updateStatus($event)"
+                    [withCard]="false"
+                    ></app-crud>
+                </mat-expansion-panel>
+                @if(hasOptionSelected){
+                    <mat-expansion-panel [hideToggle]="false" expanded="true" class="mb-1 border">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title><h6 class="text-muted poppins-regular">COMPANIAS ASIGNADAS</h6></mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="d-flex align-items-center gap-1 justify-content-end mb-3">
+                          <mat-icon class="text-muted p-0">mouse</mat-icon>
+                          <p class="text-muted p-0 m-0">Click para asignar/desasignar</p>
+                        </div>
+                        <app-list-options
+                        [data]="listCompanies"
+                        (optionSelected)="assignOneCompany($event)"
+                        />
+                    </mat-expansion-panel>
+                }
+            </mat-accordion>
           </div>
-          <mat-accordion multi>
-              <mat-expansion-panel [hideToggle]="false" expanded="true" class="mb-1 border">
-                  <mat-expansion-panel-header>
-                      <mat-panel-title><h6 class="text-muted poppins-regular">EMPLEADO</h6></mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <app-crud
-                  [templateOutlet]="customTemplate"
-                  [optionSelected]="optionSelected"
-                  [form]="form"
-                  (submitForm)="executeService($event)"
-                  (updateStatus)="updateStatus($event)"
-                  [withCard]="false"
-                  ></app-crud>
-              </mat-expansion-panel>
-              @if(hasOptionSelected){
-                  <mat-expansion-panel [hideToggle]="false" expanded="true" class="mb-1 border">
-                      <mat-expansion-panel-header>
-                          <mat-panel-title><h6 class="text-muted poppins-regular">COMPANIAS ASIGNADAS</h6></mat-panel-title>
-                      </mat-expansion-panel-header>
-                      <div class="d-flex align-items-center gap-1 justify-content-end mb-3">
-                        <mat-icon class="text-muted p-0">mouse</mat-icon>
-                        <p class="text-muted p-0 m-0">Click para asignar/desasignar</p>
-                      </div>
-                      <app-list-options
-                      [data]="listCompanies"
-                      (optionSelected)="assignOneCompany($event)"
-                      />
-                  </mat-expansion-panel>
-              }
-          </mat-accordion>
         </mat-card>
       </div>
   </div>
