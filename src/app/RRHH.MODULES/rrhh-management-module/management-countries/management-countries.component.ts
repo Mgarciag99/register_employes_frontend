@@ -95,6 +95,7 @@ export class ManagementCountriesComponent implements OnInit {
   }
 
   get() {
+    this.loadingTable = true;
     this.countriesService.get(this.paramsPagination)
       .pipe(takeUntil(this.destroSubject))
       .subscribe({

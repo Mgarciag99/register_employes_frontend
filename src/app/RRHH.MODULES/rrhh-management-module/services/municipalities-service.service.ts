@@ -29,9 +29,9 @@ export class MunicipalitiesServiceService {
     return this.ApiService.put<{idMunicipality: number}>(`municipality/delete/${idCountry}`, payload)
   }
 
-  getList(department?: number){
+  getList(idCountry?: number){
     const loader: Loaders = { loaderType: 'skeleton' }; 
-    return this.ApiService.get<Catalogs[]>('municipality/municipalities-list', {department}, loader)
+    return this.ApiService.get<Catalogs[]>('municipality/municipalities-list', {idCountry}, loader)
   }
 
 }
