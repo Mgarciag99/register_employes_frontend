@@ -3,13 +3,13 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { CountriesService } from '../services/countries.service';
 import { Columns, Pagination } from '@shared/interfaces';
-import { Country } from '../interfaces';
 import { PageEvent } from '@angular/material/paginator';
-import { payloadCreateCountry } from '../interfaces/payload-country.interface';
 import { Catalogs } from '@shared/interfaces/catalogs.interface';
-import { MatSelectChange } from '@angular/material/select';
 import { DepartmentsService } from '../services/departments.service';
 import { MunicipalitiesServiceService } from '../services/municipalities-service.service';
+import { CompaniesService } from '../services/companies.service';
+import { Company } from '../interfaces/company.interface';
+import { emailValidator } from '@core/utilities/validator-email';
 
 @Component({
   selector: 'app-management-companies',
@@ -20,6 +20,7 @@ export class ManagementCompaniesComponent implements OnInit {
 
   private formBuilder = inject(FormBuilder);
   private destroSubject = new Subject<any>;
+  private companiesService = inject(CompaniesService)
   private countriesService = inject(CountriesService);
   private departmentsService = inject(DepartmentsService)
   private municipalitiesServiceService = inject(MunicipalitiesServiceService)
@@ -32,13 +33,12 @@ export class ManagementCompaniesComponent implements OnInit {
     legalName: ['', [Validators.required]],
     comercialName: ['', [Validators.required]],
     phoneNumber: ['', [Validators.required]],
-    email: ['', [Validators.required]],
-    name: ['', [Validators.required]]
+    email: ['', [Validators.required, emailValidator()]],
   })
 
   columns: Columns[] = [
     {
-      field: "name"
+      field: "legalName"
     }
   ]
 
@@ -48,16 +48,15 @@ export class ManagementCompaniesComponent implements OnInit {
     page: 1,
   }
 
-  data: Country[] = [];
+  data: Company[] = [];
   length: number = 0;
   optionSelected: unknown = {};
   
   listCountries: Catalogs[] = [];
   listDepartments: Catalogs[] = [];
   listMunicipalities: Catalogs[] = [];
-
-
-
+  loadingTable = true;
+  
   ngOnInit() {
     this.get();
     this.loadCountries();
@@ -73,10 +72,10 @@ export class ManagementCompaniesComponent implements OnInit {
     })
   }
 
-  loadDepartments(event: MatSelectChange){
-    const country = event.value;
-    if(!country) return; 
-    this.departmentsService.getList(country)
+  loadDepartments(idCountry: number){
+    if(!idCountry) return; 
+    this.loadingTable = false;
+    this.departmentsService.getList(idCountry)
     .pipe(takeUntil(this.destroSubject))
     .subscribe({
       next: (data) => {
@@ -85,16 +84,17 @@ export class ManagementCompaniesComponent implements OnInit {
     })
   }
 
-  loadMunicipalities(event: MatSelectChange){
-    const department = event.value;
-    if(!department) return; 
-    this.municipalitiesServiceService.getList(department)
+  loadMunicipalities(idDepartment: number){
+    if(!idDepartment) return; 
+    this.loadingTable = false;
+    this.municipalitiesServiceService.getList(idDepartment)
     .pipe(takeUntil(this.destroSubject))
     .subscribe({
       next: (data) => {
         this.listMunicipalities = data;
       }
-    })  }
+    })  
+  }
 
   updateParams(pagination: PageEvent) {
     this.paramsPagination.page = pagination?.pageIndex + 1;
@@ -109,7 +109,7 @@ export class ManagementCompaniesComponent implements OnInit {
   }
 
   get() {
-    this.countriesService.get(this.paramsPagination)
+    this.companiesService.get(this.paramsPagination)
       .pipe(takeUntil(this.destroSubject))
       .subscribe({
         next: ({ data, total }) => {
@@ -119,18 +119,26 @@ export class ManagementCompaniesComponent implements OnInit {
       })
   }
 
-  handleOptionSelected(event: Country) {
+  handleOptionSelected(event: Company) {
+    const { idCountry, idDepartment } = event;
+    if(idCountry){
+      this.loadDepartments(idCountry);
+    }
+    if(idDepartment){
+      this.loadMunicipalities(idDepartment);
+    }
     this.optionSelected = event;
   }
 
-  observableToExecute(formData: Country) {
+  observableToExecute(formData: Company) {
     if (Object.keys(formData).length) {
-      return this.countriesService.update(this.form.value as payloadCreateCountry, formData.idCountry)
+      return this.companiesService.update(this.form.value as any, formData.idCompany)
     }
-    return this.countriesService.save(this.form.value as payloadCreateCountry)
+    return this.companiesService.save(this.form.value as any)
   }
 
-  executeService(formData: Country) {
+  executeService(formData: Company) {
+    this.loadingTable = true;
     this.observableToExecute(formData)
       .subscribe({
         next: (data) => {
@@ -142,9 +150,10 @@ export class ManagementCompaniesComponent implements OnInit {
       })
   }
 
-  updateStatus(formData: Country) {
-    const { status, idCountry } = formData
-    this.countriesService.delete({ status: !status }, idCountry)
+  updateStatus(formData: Company) {
+    const { status, idCompany } = formData;
+    this.loadingTable = true;
+    this.companiesService.delete({ status: !status }, idCompany)
       .subscribe({
         next: (data) => {
           if (data) {

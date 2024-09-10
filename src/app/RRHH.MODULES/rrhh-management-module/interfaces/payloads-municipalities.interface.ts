@@ -1,4 +1,5 @@
 export interface payloadCreateMunicipality{
     name: string;
-    idDepartment: number
+    idDepartment: number;
+    idCountry: number;
 }

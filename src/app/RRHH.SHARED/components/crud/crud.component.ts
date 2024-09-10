@@ -26,6 +26,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 export class CrudComponent {
   private DialogService = inject(DialogService);
   @Input() templateOutlet!: TemplateRef<any>;
+  @Input() withCard: boolean = true;
   @Input() optionSelected: any = {};
   @Input() form!: FormGroup;
   @Output() submitForm = new EventEmitter<any>();

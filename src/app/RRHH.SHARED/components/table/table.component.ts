@@ -33,6 +33,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class TableComponent implements OnInit {
   private loaderService = inject(LoaderService);
+  
   isloading: boolean = false;
   loaderType: 'loader' | 'skeleton' | null = null;
   search: string = '';
@@ -40,6 +41,7 @@ export class TableComponent implements OnInit {
   @Input() data: any[] = [];
   @Input() columns: Columns [] = [];
   @Input() length: number = 0;
+  @Input() loadingTable: boolean = true;
   @Input({required: true}) title: string = ''
   @Output() paginationChange = new EventEmitter<PageEvent>();
   @Output() optionSelected = new EventEmitter<any>();

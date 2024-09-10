@@ -3,6 +3,7 @@ import { ManagementCountriesComponent } from './management-countries/management-
 import { ManagementDepartmentsComponent } from './management-departments/management-departments.component';
 import { ManagementMunicipalitiesComponent } from './management-municipalities/management-municipalities.component';
 import { ManagementCompaniesComponent } from './management-companies/management-companies.component';
+import { ManagementEmployeeComponent } from './management-employee/management-employee.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'companies',
     component: ManagementCompaniesComponent
+  },
+  {
+    path: 'employes',
+    component: ManagementEmployeeComponent
   }
 ];
 

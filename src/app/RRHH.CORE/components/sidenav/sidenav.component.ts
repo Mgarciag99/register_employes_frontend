@@ -40,7 +40,7 @@ export class SidenavComponent implements OnInit {
     this.navOptions = [
       {
         id: "",
-        name: "Mantenimientos",
+        name: "Gestion",
         route: "",
         icon: "",
         submenus: [
@@ -67,6 +67,12 @@ export class SidenavComponent implements OnInit {
             name: "Companias",
             route: "./management/companies",
             icon: "apartment"
+          },
+          {
+            id: "1-5",
+            name: "Empleados",
+            route: "./management/employes",
+            icon: "badge"
           }
         ]
       }

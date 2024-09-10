@@ -1,0 +1,11 @@
+  <div class="row">
+    @for(element of data; track element){
+      <div class="col-4" >
+        <button class="btn border w-100" mat-stroked-button >{{ element.name }}</button>
+      </div>
+    } @empty {
+      <h6 class="text-muted">No hay datos disponibles</h6>
+    }
+  </div>  
+
+

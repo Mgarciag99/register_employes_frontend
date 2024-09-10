@@ -2,12 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DepartmentsService } from '../services/departments.service';
-import { CountriesService } from '../services/countries.service';
 import { Columns, Pagination } from '@shared/interfaces';
-import { Department, Municipality } from '../interfaces';
+import { Municipality } from '../interfaces';
 import { Catalogs } from '@shared/interfaces/catalogs.interface';
 import { PageEvent } from '@angular/material/paginator';
 import { MunicipalitiesServiceService } from '../services/municipalities-service.service';
+import { CountriesService } from '../services/countries.service';
 
 @Component({
   selector: 'app-management-municipalities',
@@ -20,10 +20,11 @@ export class ManagementMunicipalitiesComponent implements OnInit {
   private destroSubject = new Subject<any>;
   private municipalitiesService = inject(MunicipalitiesServiceService)
   private departmentsService = inject(DepartmentsService);
-  private CountryService = inject(CountriesService);
+  private countriesService = inject(CountriesService);
 
   form = this.formBuilder.group({
     name: ['', [Validators.required]],
+    idCountry: ['', [Validators.required]],
     idDepartment: ['', [Validators.required]]
   })
 
@@ -43,15 +44,30 @@ export class ManagementMunicipalitiesComponent implements OnInit {
   length: number = 0;
   optionSelected: unknown = {};
   listDepartments: Catalogs[]= []
+  listCountries: Catalogs[] = [];
+
+  loadingTable: boolean = true;
 
 
   ngOnInit() {
     this.get();
-    this.getCatalog();
+    this.loadCountries();
   }
 
-  getCatalog(){
-    this.departmentsService.getList()
+  loadCountries(){
+    this.countriesService.getList()
+    .pipe(takeUntil(this.destroSubject))
+    .subscribe({
+      next: (data) => {
+        this.listCountries = data;
+      }
+    })
+  }
+
+  loadDepartments(idCountry: number){
+    if(!idCountry) return; 
+    this.loadingTable = false;
+    this.departmentsService.getList(idCountry)
     .pipe(takeUntil(this.destroSubject))
     .subscribe({
       next: (data) => {
@@ -84,6 +100,13 @@ export class ManagementMunicipalitiesComponent implements OnInit {
   }
 
   handleOptionSelected(event: Municipality) {
+    const { idCountry, idDepartment } = event;
+    if(idCountry){
+      this.loadDepartments(idCountry);
+    }
+    // if(idDepartment){
+    //   this.loadMunicipalities(idDepartment);
+    // }
     this.optionSelected = event;
   }
 

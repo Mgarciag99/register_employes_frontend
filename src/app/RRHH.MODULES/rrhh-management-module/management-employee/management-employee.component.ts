@@ -1,33 +1,35 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { DepartmentsService } from '../services/departments.service';
 import { Columns, Pagination } from '@shared/interfaces';
-import { Country, Department } from '../interfaces';
 import { PageEvent } from '@angular/material/paginator';
-import { CountriesService } from '../services/countries.service';
-import { Catalogs } from '@shared/interfaces/catalogs.interface';
+import { EmployesService } from '../services/employes.service';
+import { Employee } from '../interfaces/employee.interface';
+import { emailValidator } from '@core/utilities/validator-email';
 
 @Component({
-  selector: 'app-management-departments',
-  templateUrl: './management-departments.component.html',
-  styleUrls: ['./management-departments.component.css']
+  selector: 'app-management-employee',
+  templateUrl: './management-employee.component.html',
+  styleUrls: ['./management-employee.component.css']
 })
-export class ManagementDepartmentsComponent {
+export class ManagementEmployeeComponent implements OnInit {
 
   private formBuilder = inject(FormBuilder);
   private destroSubject = new Subject<any>;
-  private departmentsService = inject(DepartmentsService);
-  private CountryService = inject(CountriesService);
+  private employesService = inject(EmployesService)
 
   form = this.formBuilder.group({
-    name: ['', [Validators.required]],
-    idCountry: ['', [Validators.required]]
+    personalId: ['', [Validators.required]],
+    firtName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    age: [Number(), [Validators.required]],
+    phoneNumber: ['', [Validators.required]],
+    email: ['', [Validators.required, emailValidator()]]
   })
 
   columns: Columns[] = [
     {
-      field: "name"
+      field: "firtName"
     }
   ]
 
@@ -37,26 +39,13 @@ export class ManagementDepartmentsComponent {
     page: 1,
   }
 
-  data: Department[] = [];
+  data: Employee[] = [];
   length: number = 0;
   optionSelected: unknown = {};
-  listCountries: Catalogs[]= []
-
 
   ngOnInit() {
     this.get();
-    this.getCatalog();
   }
-
-  getCatalog(){
-    this.CountryService.getList()
-    .pipe(takeUntil(this.destroSubject))
-    .subscribe({
-      next: (data) => {
-        this.listCountries = data;
-      }
-    })
-  } 
 
   updateParams(pagination: PageEvent) {
     this.paramsPagination.page = pagination?.pageIndex + 1;
@@ -71,7 +60,7 @@ export class ManagementDepartmentsComponent {
   }
 
   get() {
-    this.departmentsService.get(this.paramsPagination)
+    this.employesService.get(this.paramsPagination)
       .pipe(takeUntil(this.destroSubject))
       .subscribe({
         next: ({ data, total }) => {
@@ -81,19 +70,18 @@ export class ManagementDepartmentsComponent {
       })
   }
 
-  handleOptionSelected(event: Department) {
+  handleOptionSelected(event: Employee) {
     this.optionSelected = event;
   }
 
-  observableToExecute(formData: Department) {
+  observableToExecute(formData: Employee) {
     if (Object.keys(formData).length) {
-      return this.departmentsService.update(this.form.value as any, formData.idDepartment)
+      return this.employesService.update(this.form.value as any, formData.idEmploye)
     }
-    return this.departmentsService.save(this.form.value as any)
+    return this.employesService.save(this.form.value as any)
   }
 
-  executeService(formData: Department) {
-    if(!formData) return;
+  executeService(formData: Employee) {
     this.observableToExecute(formData)
       .subscribe({
         next: (data) => {
@@ -105,9 +93,9 @@ export class ManagementDepartmentsComponent {
       })
   }
 
-  updateStatus(formData: Department) {
-    const { status, idDepartment } = formData
-    this.departmentsService.delete({ status: !status }, idDepartment)
+  updateStatus(formData: Employee) {
+    const { status, idEmploye } = formData
+    this.employesService.delete({ status: !status }, idEmploye)
       .subscribe({
         next: (data) => {
           if (data) {

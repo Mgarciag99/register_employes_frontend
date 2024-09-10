@@ -1,0 +1,10 @@
+.mat-expansion-panel{
+    box-shadow: none !important;
+}
+
+.mat-expansion-panel-spacing{
+    padding: 0px;
+}
+.mat-expansion-panel-spacing{
+    margin: 0px;
+}

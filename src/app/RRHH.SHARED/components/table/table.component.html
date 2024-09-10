@@ -17,9 +17,9 @@
     }
   </mat-form-field>
   <div class="selection-list-container">
-    @if(loaderType === 'skeleton' && loaderType){
+    @if(loaderType === 'skeleton' && isloading && loadingTable){
       <app-skeleton-table/>
-    }@else if(!loaderType){
+    }@else{
       <mat-selection-list class="h-100 overflow-auto pe-1" [multiple]="false" (selectionChange)="selectedOption($event)"  color="primary">
         <div class="h-100">
           @for (item of data; track item) {

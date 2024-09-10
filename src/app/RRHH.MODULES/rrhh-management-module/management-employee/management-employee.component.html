@@ -1,0 +1,98 @@
+<div class="h-100 p-3">
+  <div class="row h-100">
+      <div class="col-4 h-100 col-xs-12">
+          <app-table
+          [data]="data"
+          [columns]="columns"
+          [length]="length"
+          (paginationChange)="updateParams($event)"
+          (optionSelected)="handleOptionSelected($event)"
+          (onSearchText)="search($event)"
+          title="Empleados"
+          ></app-table>
+      </div>
+      <div class="col-8 h-100 col-xs-12">
+          <app-crud
+          [templateOutlet]="customTemplate"
+          [optionSelected]="optionSelected"
+          [form]="form"
+          (submitForm)="executeService($event)"
+          (updateStatus)="updateStatus($event)"
+          ></app-crud>
+      </div>
+  </div>
+</div>
+
+<ng-template #customTemplate>
+  <form [formGroup]="form">
+      <mat-form-field appearance="outline"  class="col-12 col-lg-6 p-0 pe-lg-2">
+          <mat-label>Identificacion</mat-label>
+          <input 
+          type="text" 
+          matInput 
+          formControlName="personalId"
+          placeholder="Buscar">
+          <mat-error *ngIf="form.get('personalId')?.invalid && form.get('personalId')?.touched">
+              El campo es requerido
+          </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Nombres</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="firtName"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('firtName')?.invalid && form.get('firtName')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Apellidos</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="lastName"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Edad</mat-label>
+        <input 
+        type="number" 
+        matInput 
+        formControlName="age"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('age')?.invalid && form.get('age')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Numero de telefono</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="phoneNumber"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('phoneNumber')?.invalid && form.get('phoneNumber')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Email</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="email"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched">
+            El campo es requerido
+        </mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('invalidEmail') && form.get('email')?.touched && !form.get('email')?.hasError('required')">
+          Por favor ingrese un correo electonico valido.
+        </mat-error>
+      </mat-form-field>
+  </form>
+</ng-template>

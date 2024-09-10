@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CountriesService } from '../services/countries.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -6,6 +6,10 @@ import { Country } from '../interfaces';
 import { Columns, Pagination } from '@shared/interfaces';
 import { PageEvent } from '@angular/material/paginator';
 import { payloadCreateCountry } from '../interfaces/payload-country.interface';
+import { MatAccordion } from '@angular/material/expansion';
+import { Catalogs } from '@shared/interfaces/catalogs.interface';
+import { DepartmentsService } from '../services/departments.service';
+import { MunicipalitiesServiceService } from '../services/municipalities-service.service';
 
 @Component({
   selector: 'app-management-countries',
@@ -16,8 +20,11 @@ import { payloadCreateCountry } from '../interfaces/payload-country.interface';
 export class ManagementCountriesComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private destroSubject = new Subject<any>;
-  private countriesService = inject(CountriesService)
-
+  private countriesService = inject(CountriesService);
+  private departmentsService = inject(DepartmentsService);
+  private municipalitiesServiceService = inject(MunicipalitiesServiceService)
+  accordion = viewChild.required(MatAccordion);
+  
   form = this.formBuilder.group({
     name: ['', [Validators.required]]
   })
@@ -36,13 +43,43 @@ export class ManagementCountriesComponent implements OnInit {
 
   data: Country[] = [];
   length: number = 0;
-  optionSelected: unknown = {};
+  optionSelected = {};
+  listDepartments: Catalogs[] = [];
+  listMunicipalities: Catalogs[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  loadingTable = true;
 
+  get hasOptionSelected(): boolean {
+    return Object.keys(this.optionSelected).length > 0;
+  }
 
   ngOnInit() {
     this.get();
+  }
+  
+
+  loadDepartments(idCountry: number){
+    if(!idCountry) return; 
+    this.loadingTable = false;
+    this.departmentsService.getList(idCountry)
+    .pipe(takeUntil(this.destroSubject))
+    .subscribe({
+      next: (data) => {
+        this.listDepartments = data;
+      }
+    })
+  }
+
+  loadMunicipalities(idCountry: number){
+    if(!idCountry) return; 
+    this.loadingTable = false;
+    this.municipalitiesServiceService.getList(idCountry)
+    .pipe(takeUntil(this.destroSubject))
+    .subscribe({
+      next: (data) => {
+        this.listMunicipalities = data;
+      }
+    })  
   }
 
   updateParams(pagination: PageEvent) {
@@ -69,6 +106,8 @@ export class ManagementCountriesComponent implements OnInit {
   }
 
   handleOptionSelected(event: Country) {
+    this.loadDepartments(event.idCountry);
+    this.loadMunicipalities(event.idCountry);
     this.optionSelected = event;
   }
 

@@ -9,6 +9,7 @@
           (optionSelected)="handleOptionSelected($event)"
           (onSearchText)="search($event)"
           title="Municipalidades"
+          [loadingTable]="loadingTable"
           ></app-table>
       </div>
       <div class="col-8 h-100 col-xs-12">
@@ -36,16 +37,28 @@
                 El campo es requerido
             </mat-error>
         </mat-form-field>
+
         <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+            <mat-label>Pais</mat-label>
+            <mat-select formControlName="idCountry" (selectionChange)="loadDepartments($event.value);">
+            @for (country of listCountries; track country) {
+                <mat-option [value]="country.id">{{country.name}}</mat-option>
+            }
+            </mat-select>
+            <mat-error *ngIf="form.get('idCountry')?.invalid && form.get('idCountry')?.touched">
+                El campo es requerido
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
             <mat-label>Departamento</mat-label>
             <mat-select formControlName="idDepartment">
-            @for (department of listDepartments; track department) {
-                <mat-option [value]="department.id">{{department.name}}</mat-option>
+            @for (country of listDepartments; track country) {
+                <mat-option [value]="country.id" >{{country.name}}</mat-option>
             }
             </mat-select>
             <mat-error *ngIf="form.get('idDepartment')?.invalid && form.get('idDepartment')?.touched">
                 El campo es requerido
             </mat-error>
-        </mat-form-field>
+          </mat-form-field>
   </form>
 </ng-template>

@@ -30,7 +30,7 @@ export class DepartmentsService {
 
 
   getList(idCountry?: number) {
-    const loader: Loaders = { loaderType: 'loader' };
+    const loader: Loaders = { loaderType: 'skeleton' };
     return this.ApiService.get<Catalogs[]>('department/departments-list', { idCountry }, loader)
   }
 

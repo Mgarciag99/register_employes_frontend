@@ -1,7 +1,15 @@
-<mat-card class="h-100 p-3">
+@if(withCard){
+  <mat-card class="h-100 p-3">
+    <ng-container *ngTemplateOutlet="templateCrud"></ng-container>
+  </mat-card>
+}@else {
+  <ng-container *ngTemplateOutlet="templateCrud"></ng-container>
+}
+
+<ng-template #templateCrud>
   <h4 class="poppins-extrabold mb-3">{{ (!isEdit) ? 'Agregar' : 'Editar' }}</h4>
   <ng-container *ngTemplateOutlet="templateOutlet"></ng-container>
-  <mat-card-actions class="d-flex justify-content-between">
+  <div class="d-flex justify-content-between">
     @if(isEdit){
       <mat-slide-toggle
       class="example-margin"
@@ -28,5 +36,7 @@
       (click)="save()"
       >{{ (!isEdit) ? 'Agregar' : 'Editar' }}</button>
     </div>
-  </mat-card-actions>
-</mat-card>
+  </div>
+</ng-template>
+
+

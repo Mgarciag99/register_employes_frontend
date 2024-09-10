@@ -9,6 +9,7 @@
           (optionSelected)="handleOptionSelected($event)"
           (onSearchText)="search($event)"
           title="Compania"
+          [loadingTable]="loadingTable"
           ></app-table>
       </div>
       <div class="col-8 h-100 col-xs-12">
@@ -27,7 +28,7 @@
   <form [formGroup]="form">
       <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
         <mat-label>Pais</mat-label>
-        <mat-select formControlName="idCountry" (selectionChange)="loadDepartments($event);">
+        <mat-select formControlName="idCountry" (selectionChange)="loadDepartments($event.value);">
         @for (country of listCountries; track country) {
             <mat-option [value]="country.id">{{country.name}}</mat-option>
         }
@@ -38,7 +39,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
         <mat-label>Departamento</mat-label>
-        <mat-select formControlName="idDepartment" (selectionChange)="loadMunicipalities($event);">
+        <mat-select formControlName="idDepartment" (selectionChange)="loadMunicipalities($event.value);">
         @for (country of listDepartments; track country) {
             <mat-option [value]="country.id" >{{country.name}}</mat-option>
         }
@@ -109,9 +110,12 @@
         matInput 
         formControlName="email"
         placeholder="Buscar">
-        <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-            El campo es requerido
-        </mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched">
+          El campo es requerido
+      </mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('invalidEmail') && form.get('email')?.touched && !form.get('email')?.hasError('required')">
+        Por favor ingrese un correo electonico valido.
+      </mat-error>
       </mat-form-field>
   </form>
 </ng-template>

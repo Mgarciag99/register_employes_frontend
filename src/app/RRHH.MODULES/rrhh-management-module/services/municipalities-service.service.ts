@@ -18,11 +18,11 @@ export class MunicipalitiesServiceService {
   }
 
   save(payload: payloadCreateMunicipality){
-    return this.ApiService.post<{idMunicipality: number}>(`municipality/create/${payload.idDepartment}`, {name: payload.name})
+    return this.ApiService.post<{idMunicipality: number}>(`municipality/create/${payload.idDepartment}/${payload.idCountry}`, {name: payload.name})
   }
 
   update(payload: payloadCreateMunicipality, idMunicipality: number){
-    return this.ApiService.post<{idMunicipality: number}>(`municipality/update/${idMunicipality}/${payload.idDepartment}`, {name: payload.name})
+    return this.ApiService.post<{idMunicipality: number}>(`municipality/update/${idMunicipality}/${payload.idDepartment}/${payload.idCountry}`, {name: payload.name})
   }
 
   delete(payload: StatusPayload, idCountry: number){
@@ -30,7 +30,7 @@ export class MunicipalitiesServiceService {
   }
 
   getList(department?: number){
-    const loader: Loaders = { loaderType: 'loader' }; 
+    const loader: Loaders = { loaderType: 'skeleton' }; 
     return this.ApiService.get<Catalogs[]>('municipality/municipalities-list', {department}, loader)
   }
 
