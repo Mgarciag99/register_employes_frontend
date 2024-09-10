@@ -12,3 +12,10 @@ export interface Company {
     updatedAt: string;  
     createdAt: string; 
 }
+
+
+export interface AsignationCompanies{
+    id: number;
+    name: string;
+    check: boolean;
+}

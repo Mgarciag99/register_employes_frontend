@@ -1,0 +1,9 @@
+<mat-selection-list class="h-100 overflow-auto pe-1" [multiple]="true" (selectionChange)="selectedOption($event)"  color="primary">
+  <div class="h-100">
+    @for (item of data; track item) {
+      <mat-list-option [value]="item" class="rounded-5" [selected]="item.check">{{item.name}}</mat-list-option>  
+    }@empty {
+      <h6 class="text-muted">No hay datos disponibles</h6>
+    }
+  </div>
+</mat-selection-list>

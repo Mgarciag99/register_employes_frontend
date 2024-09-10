@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RrhhManagementModuleComponent } from './rrhh-management-module.component';
 import { RrhhManagementRoutes } from './rrhh-management.routing';
-import { TableComponent, CrudComponent, SelectListComponent } from '@shared/components';
+import { TableComponent, CrudComponent, SelectListComponent, ListOptionsComponent } from '@shared/components';
 import { ManagementCountriesComponent } from './management-countries/management-countries.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,7 +33,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    SelectListComponent
+    SelectListComponent,
+    ListOptionsComponent
   ],
   declarations: [
     RrhhManagementModuleComponent,

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Columns, Pagination } from '@shared/interfaces';
@@ -6,6 +6,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { EmployesService } from '../services/employes.service';
 import { Employee } from '../interfaces/employee.interface';
 import { emailValidator } from '@core/utilities/validator-email';
+import { MatAccordion } from '@angular/material/expansion';
+import { CompaniesService } from '../services/companies.service';
+import { AsignationCompanies } from '../interfaces/company.interface';
 
 @Component({
   selector: 'app-management-employee',
@@ -16,7 +19,9 @@ export class ManagementEmployeeComponent implements OnInit {
 
   private formBuilder = inject(FormBuilder);
   private destroSubject = new Subject<any>;
-  private employesService = inject(EmployesService)
+  private employesService = inject(EmployesService);
+  private companiesService = inject(CompaniesService);
+  accordion = viewChild.required(MatAccordion);
 
   form = this.formBuilder.group({
     personalId: ['', [Validators.required]],
@@ -40,11 +45,43 @@ export class ManagementEmployeeComponent implements OnInit {
   }
 
   data: Employee[] = [];
+  listCompanies: AsignationCompanies[] = [];
+
   length: number = 0;
-  optionSelected: unknown = {};
+  optionSelected: any = {} as Employee;
+  loadingTable = true;
+
+  get hasOptionSelected(): boolean {
+    return Object.keys(this.optionSelected).length > 0;
+  }
 
   ngOnInit() {
     this.get();
+  }
+
+  getCompanies(idEmploye: number) {
+    this.loadingTable = false;
+    this.companiesService.getAssignation(idEmploye)
+      .pipe(takeUntil(this.destroSubject))
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.listCompanies = data;
+          }
+        }
+      })
+  }
+
+  assignOneCompany(company: AsignationCompanies) {
+    this.companiesService.assignOne(this.optionSelected.idEmploye, company.id)
+      .pipe(takeUntil(this.destroSubject))
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.getCompanies(this.optionSelected.idEmploye);
+          }
+        }
+      })
   }
 
   updateParams(pagination: PageEvent) {
@@ -53,7 +90,7 @@ export class ManagementEmployeeComponent implements OnInit {
     this.get();
   }
 
-  search(text: string){
+  search(text: string) {
     this.paramsPagination.page = 1;
     this.paramsPagination.search = text;
     this.get();
@@ -71,6 +108,7 @@ export class ManagementEmployeeComponent implements OnInit {
   }
 
   handleOptionSelected(event: Employee) {
+    this.getCompanies(event.idEmploye);
     this.optionSelected = event;
   }
 
@@ -104,9 +142,7 @@ export class ManagementEmployeeComponent implements OnInit {
           }
         }
       })
-
   }
-
 
   ngOnDestroy(): void {
     this.destroSubject.next(null);
