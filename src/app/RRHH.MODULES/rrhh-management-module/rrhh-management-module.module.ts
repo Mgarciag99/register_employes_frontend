@@ -11,6 +11,7 @@ import { ManagementDepartmentsComponent } from './management-departments/managem
 import { ManagementMunicipalitiesComponent } from './management-municipalities/management-municipalities.component';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { ManagementCompaniesComponent } from './management-companies/management-companies.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { MatSelectModule } from '@angular/material/select';
     RrhhManagementModuleComponent,
     ManagementCountriesComponent, 
     ManagementDepartmentsComponent,
-    ManagementMunicipalitiesComponent
+    ManagementMunicipalitiesComponent,
+    ManagementCompaniesComponent
   ]
 })
 export class RrhhManagementModuleModule { }

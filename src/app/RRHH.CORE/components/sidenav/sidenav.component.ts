@@ -61,6 +61,12 @@ export class SidenavComponent implements OnInit {
             name: "Municipalidades",
             route: "./management/municipalities",
             icon: "flag"
+          },
+          {
+            id: "1-4",
+            name: "Companias",
+            route: "./management/companies",
+            icon: "apartment"
           }
         ]
       }

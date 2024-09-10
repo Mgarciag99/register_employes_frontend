@@ -32,3 +32,8 @@
 .mat-sidenav-content{
     background-color: #F1F5F9;
 }
+
+.item-sidenav-active{
+    background-color: var(--gray-semi-ligth);
+
+}

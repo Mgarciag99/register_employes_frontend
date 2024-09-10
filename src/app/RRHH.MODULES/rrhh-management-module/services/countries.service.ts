@@ -29,7 +29,7 @@ export class CountriesService {
   }
 
   getList(){
-    const loader: Loaders = { loaderType: 'skeleton' }; 
+    const loader: Loaders = { loaderType: 'loader' }; 
     return this.ApiService.get<Catalogs[]>('countries/countries-list', {}, loader)
   }
 

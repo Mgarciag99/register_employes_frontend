@@ -17,7 +17,7 @@
     }
   </mat-form-field>
   <div class="selection-list-container">
-    @if(loaderType === 'skeleton'){
+    @if(loaderType === 'skeleton' && loaderType){
       <app-skeleton-table/>
     }@else if(!loaderType){
       <mat-selection-list class="h-100 overflow-auto pe-1" [multiple]="false" (selectionChange)="selectedOption($event)"  color="primary">

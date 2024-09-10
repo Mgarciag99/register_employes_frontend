@@ -1,0 +1,117 @@
+<div class="h-100 p-3">
+  <div class="row h-100">
+      <div class="col-4 h-100 col-xs-12">
+          <app-table
+          [data]="data"
+          [columns]="columns"
+          [length]="length"
+          (paginationChange)="updateParams($event)"
+          (optionSelected)="handleOptionSelected($event)"
+          (onSearchText)="search($event)"
+          title="Compania"
+          ></app-table>
+      </div>
+      <div class="col-8 h-100 col-xs-12">
+          <app-crud
+          [templateOutlet]="customTemplate"
+          [optionSelected]="optionSelected"
+          [form]="form"
+          (submitForm)="executeService($event)"
+          (updateStatus)="updateStatus($event)"
+          ></app-crud>
+      </div>
+  </div>
+</div>
+
+<ng-template #customTemplate>
+  <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Pais</mat-label>
+        <mat-select formControlName="idCountry" (selectionChange)="loadDepartments($event);">
+        @for (country of listCountries; track country) {
+            <mat-option [value]="country.id">{{country.name}}</mat-option>
+        }
+        </mat-select>
+        <mat-error *ngIf="form.get('idCountry')?.invalid && form.get('idCountry')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Departamento</mat-label>
+        <mat-select formControlName="idDepartment" (selectionChange)="loadMunicipalities($event);">
+        @for (country of listDepartments; track country) {
+            <mat-option [value]="country.id" >{{country.name}}</mat-option>
+        }
+        </mat-select>
+        <mat-error *ngIf="form.get('idDepartment')?.invalid && form.get('idDepartment')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Municipalidad</mat-label>
+        <mat-select formControlName="idMunicipality">
+        @for (country of listMunicipalities; track country) {
+            <mat-option [value]="country.id">{{country.name}}</mat-option>
+        }
+        </mat-select>
+        <mat-error *ngIf="form.get('idMunicipality')?.invalid && form.get('idMunicipality')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+        <mat-label>Numero de nit</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="nit"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('nit')?.invalid && form.get('nit')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12">
+          <mat-label>Nombre legal</mat-label>
+          <input 
+          type="text" 
+          matInput 
+          formControlName="legalName"
+          placeholder="Buscar">
+          <mat-error *ngIf="form.get('legalName')?.invalid && form.get('legalName')?.touched">
+              El campo es requerido
+          </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Nombre Comercial</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="comercialName"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('comercialName')?.invalid && form.get('comercialName')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Numero de telefono</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="phoneNumber"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('phoneNumber')?.invalid && form.get('phoneNumber')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Correo electronico</mat-label>
+        <input 
+        type="text" 
+        matInput 
+        formControlName="email"
+        placeholder="Buscar">
+        <mat-error *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+            El campo es requerido
+        </mat-error>
+      </mat-form-field>
+  </form>
+</ng-template>

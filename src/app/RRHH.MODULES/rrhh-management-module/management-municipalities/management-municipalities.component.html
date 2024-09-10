@@ -1,3 +1,51 @@
-<p>
-  management-municipalities works!
-</p>
+<div class="h-100 p-3">
+  <div class="row h-100">
+      <div class="col-4 h-100 col-xs-12">
+          <app-table
+          [data]="data"
+          [columns]="columns"
+          [length]="length"
+          (paginationChange)="updateParams($event)"
+          (optionSelected)="handleOptionSelected($event)"
+          (onSearchText)="search($event)"
+          title="Municipalidades"
+          ></app-table>
+      </div>
+      <div class="col-8 h-100 col-xs-12">
+          <app-crud
+          [templateOutlet]="customTemplate"
+          [optionSelected]="optionSelected"
+          [form]="form"
+          (submitForm)="executeService($event)"
+          (updateStatus)="updateStatus($event)"
+          ></app-crud>
+      </div>
+  </div>
+</div>
+
+<ng-template #customTemplate>
+  <form [formGroup]="form" class="row w-100 m-0">
+        <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+            <mat-label>Nombre</mat-label>
+            <input 
+            type="text" 
+            matInput 
+            formControlName="name"
+            placeholder="Buscar">
+            <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+                El campo es requerido
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12 col-lg-6 p-0 pe-lg-2">
+            <mat-label>Departamento</mat-label>
+            <mat-select formControlName="idDepartment">
+            @for (department of listDepartments; track department) {
+                <mat-option [value]="department.id">{{department.name}}</mat-option>
+            }
+            </mat-select>
+            <mat-error *ngIf="form.get('idDepartment')?.invalid && form.get('idDepartment')?.touched">
+                El campo es requerido
+            </mat-error>
+        </mat-form-field>
+  </form>
+</ng-template>
