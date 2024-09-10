@@ -7,6 +7,10 @@ import { ManagementEmployeeComponent } from './management-employee/management-em
 
 const routes: Routes = [
   {
+    path: '',
+    component: ManagementEmployeeComponent
+  },
+  {
     path: 'countries',
     component: ManagementCountriesComponent
   },
