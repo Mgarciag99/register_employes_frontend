@@ -15,7 +15,7 @@
       <mat-nav-list 
       class="d-flex flex-column gap-2 p-2">
         @for (nav of navOptions; track nav) {
-          <h6 class="text-light px-3 pt-3 menu-title">{{nav.name | uppercase}} </h6>
+          <!-- <h6 class="text-light px-3 pt-3 menu-title">{{nav.name | uppercase}} </h6> -->
           @for(submenu of nav.submenus; track submenu){
             <a  
             [routerLink]="[submenu.route]"
